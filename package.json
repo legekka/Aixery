@@ -1,6 +1,6 @@
 {
     "name": "aixery",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A general websocket client for gekky",
     "repository": "https://github.com/legekka/aixery",
     "author": "legekka",
