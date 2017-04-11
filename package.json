@@ -5,10 +5,10 @@
     "repository": "https://github.com/legekka/aixery",
     "author": "legekka",
     "dependencies": {
-        "websocket": ">=1.0.24"
+        "websocket": "1.0.24"
     },
     "main": "client",
     "engines": {
-        "node": ">= 0.4.1"
+        "node": ">=6.0.0"
     }
 }
