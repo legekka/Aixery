@@ -1,9 +1,12 @@
 var ws = require('websocket');
+var fs = require('fs');
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
 
 function initialize() {
+    if (!fs.existsSync('./clientinfo.txt')) {
 
+    }
 }
 
 
@@ -37,6 +40,6 @@ function start() {
         });
     });
 
-    client.connect('ws://localhost:9669/', 'echo-protocol', JSON.stringify({ "username": "testuser", "key": 'newuser' }));
+    client.connect('ws://leibniz.cf:9669/', 'echo-protocol', JSON.stringify({ "username": "testuser", "key": "649RPYYX" }));
 }
 
