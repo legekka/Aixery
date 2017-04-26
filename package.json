@@ -5,7 +5,8 @@
     "repository": "https://github.com/legekka/aixery",
     "author": "legekka",
     "dependencies": {
-        "websocket": "1.0.24"
+        "websocket": "1.0.24",
+        "chalk": "1.1.3"
     },
     "main": "client",
     "engines": {
