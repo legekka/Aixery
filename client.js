@@ -15,8 +15,8 @@ var complete = false;
 var username;
 var key;
 
-//var serverip = 'ws://localhost:9669/';
-var serverip = 'ws://leibniz.cf:9669/';
+var serverip = 'ws://localhost:9669/';
+//var serverip = 'ws://leibniz.cf:9669/';
 
 function initialize() {
     if (!fs.existsSync('./clientinfo.txt')) {
@@ -92,7 +92,21 @@ function firstConnect() {
 //start();
 initialize();
 
+function messageOBJ(data) {
+    return {
+        'username': username,
+        'content': data,
+        'type': 'message',
+    };
+}
 
+function commandOBJ(data) {
+    return {
+        'username': username,
+        'type': 'command',
+        'command': data.substr(1)
+    }
+}
 
 function start() {
     client.on('connectFailed', function (error) {
@@ -104,12 +118,20 @@ function start() {
 
         var inp = process.openStdin();
         inp.addListener('data', (d) => {
-            connection.sendUTF(d);
+            var txt = d.toString().trim();
+            if (txt.startsWith('!')) {
+                if (txt == '!userlist') {
+                    connection.sendUTF(JSON.stringify(commandOBJ(txt)));
+                }
+            } else {
+                connection.sendUTF(JSON.stringify(messageOBJ(txt)));
+            }
         });
 
         connection.on('message', function (message) {
             if (message.type === 'utf8') {
-                console.log(message.utf8Data);
+                parseMessage(message);
+                //console.log(message.utf8Data);
             }
         });
 
@@ -126,3 +148,9 @@ function start() {
     client.connect(serverip, 'echo-protocol', JSON.stringify({ "username": "testuser", "key": "649RPYYX" }));
 }
 
+function parseMessage(message) {
+    var msg = JSON.parse(message.utf8Data.toString().trim());
+    if (msg.type == 'message') {
+        console.log(`${msg.username}: ${msg.content}`);
+    }
+}
