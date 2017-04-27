@@ -145,7 +145,7 @@ function start() {
         });
     });
 
-    client.connect(serverip, 'echo-protocol', JSON.stringify({ "username": "testuser", "key": "649RPYYX" }));
+    client.connect(serverip, 'echo-protocol', JSON.stringify({ "username": username, "key": key }));
 }
 
 function parseMessage(message) {
