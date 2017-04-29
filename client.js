@@ -112,6 +112,11 @@ function commandOBJ(data) {
     });
 }
 
+var pingStart;
+function parseDate(date) {
+    return date.getMilliseconds() + date.getSeconds() * 1000 + date.getMinutes() * 60000 + date.getHours() * 3600000 + date.getDate() * 86400000;
+}
+
 function start() {
     client.on('connectFailed', function (error) {
         console.log('Connect Error: ' + error.toString());
@@ -125,6 +130,9 @@ function start() {
             var txt = d.toString().trim();
             if (txt.startsWith('!')) {
                 if (txt == '!userlist') {
+                    connection.sendUTF(commandOBJ(txt));
+                } else if (txt == '!ping') {
+                    pingStart = parseDate(new Date());
                     connection.sendUTF(commandOBJ(txt));
                 }
             } else {
@@ -156,5 +164,14 @@ function parseMessage(message) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
         console.log(YRpref() + `${msg.username}: ${msg.content}`);
+    } else if (msg.type == 'command') {
+        parseCommand(msg);
+    }
+}
+
+function parseCommand(msg) {
+    if (msg.command == 'pingEnd') {
+        var pingEnd = parseDate(new Date());
+        console.log(AIcl(`The ping is: ${(pingEnd - pingStart)} ms`));
     }
 }
