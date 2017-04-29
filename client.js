@@ -163,7 +163,11 @@ function start() {
 function parseMessage(message) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
-        console.log(YRpref() + `${msg.username}: ${msg.content}`);
+        if (msg.username == 'Yrexia') {
+            console.log(YRpref() + `${msg.content}`);
+        } else {
+            console.log(YRpref() + `${msg.username}: ${msg.content}`);
+        }
     } else if (msg.type == 'command') {
         parseCommand(msg);
     }
