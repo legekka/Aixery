@@ -108,7 +108,7 @@ function commandOBJ(data) {
     return JSON.stringify({
         'username': username,
         'type': 'command',
-        'command': data.substr(1)
+        'command': data
     });
 }
 
@@ -130,10 +130,10 @@ function start() {
             var txt = d.toString().trim();
             if (txt.startsWith('!')) {
                 if (txt == '!userlist') {
-                    connection.sendUTF(commandOBJ(txt));
+                    connection.sendUTF(commandOBJ(txt.substr(1)));
                 } else if (txt == '!ping') {
                     pingStart = parseDate(new Date());
-                    connection.sendUTF(commandOBJ(txt));
+                    connection.sendUTF(commandOBJ(txt.substr(1)));
                 }
             } else {
                 connection.sendUTF(messageOBJ(txt));
@@ -170,8 +170,10 @@ function parseMessage(message) {
 }
 
 function parseCommand(msg) {
-    if (msg.command == 'pingEnd') {
-        var pingEnd = parseDate(new Date());
-        console.log(AIcl(`The ping is: ${(pingEnd - pingStart)} ms`));
+    if (msg.username == 'Yrexia') {
+        if (msg.command == 'pingEnd') {
+            var pingEnd = parseDate(new Date());
+            console.log(AIcl(`The ping is: ${(pingEnd - pingStart)} ms`));
+        }
     }
 }
