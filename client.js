@@ -2,8 +2,12 @@ var ws = require('websocket');
 var fs = require('fs');
 var c = require('chalk');
 var WebSocketClient = require('websocket').client;
+var reqreload = require('./module/reqreload.js');
 var client = new WebSocketClient();
 
+function YRpref() {
+    return c.cyan('[YR] ') + reqreload('./getTime.js')('full') + ' ';
+}
 function AIcl(text) {
     console.log(c.red('[Aixery] ') + text);
 }
@@ -93,19 +97,19 @@ function firstConnect() {
 initialize();
 
 function messageOBJ(data) {
-    return {
+    return JSON.stringify({
         'username': username,
         'content': data,
         'type': 'message',
-    };
+    });
 }
 
 function commandOBJ(data) {
-    return {
+    return JSON.stringify({
         'username': username,
         'type': 'command',
         'command': data.substr(1)
-    }
+    });
 }
 
 function start() {
@@ -121,10 +125,10 @@ function start() {
             var txt = d.toString().trim();
             if (txt.startsWith('!')) {
                 if (txt == '!userlist') {
-                    connection.sendUTF(JSON.stringify(commandOBJ(txt)));
+                    connection.sendUTF(commandOBJ(txt));
                 }
             } else {
-                connection.sendUTF(JSON.stringify(messageOBJ(txt)));
+                connection.sendUTF(messageOBJ(txt));
             }
         });
 
@@ -151,6 +155,6 @@ function start() {
 function parseMessage(message) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
-        console.log(`${msg.username}: ${msg.content}`);
+        console.log(YRpref() + `${msg.username}: ${msg.content}`);
     }
 }
