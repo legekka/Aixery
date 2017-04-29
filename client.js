@@ -173,7 +173,7 @@ function parseCommand(msg) {
     if (msg.username == 'Yrexia') {
         if (msg.command == 'pingEnd') {
             var pingEnd = parseDate(new Date());
-            console.log(AIcl(`The ping is: ${(pingEnd - pingStart)} ms`));
+            AIcl(`The ping is: ${(pingEnd - pingStart)} ms`);
         }
     }
 }
