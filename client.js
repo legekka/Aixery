@@ -142,9 +142,18 @@ function start() {
                     pingStart = parseDate(new Date());
                     connection.sendUTF(commandOBJ(txt.substr(1)));
                 } else if (txt == '!teszt5000') {
-                    var content = fs.readFileSync('./teszt5000.txt').split(' ');
+                    var content = fs.readFileSync('./teszt5000.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
                     connection.sendUTF(messagev2OBJ(content));
-                }   
+                } else if (txt == '!teszt10k') {
+                    var content = fs.readFileSync('./teszt10k.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
+                    connection.sendUTF(messagev2OBJ(content));
+                }
             } else if (txt.startsWith('_')) {
                 var content = txt.substr(1).split(' ');
                 connection.sendUTF(messagev2OBJ(content));
@@ -186,6 +195,7 @@ function parseMessage(message) {
         for (i in msg.content) {
             process.stdout.write(msg.content[i] + ' ');
         }
+        process.stdout.write('\n');
     } else if (msg.type == 'command') {
         parseCommand(msg);
     } else if (msg.type == 'file') {
