@@ -104,6 +104,13 @@ function messageOBJ(data) {
     });
 }
 
+function messagev2OBJ(data) {
+    return JSON.stringify({
+        'username': username,
+        'content': data,
+        'type': 'messagev2',
+    });
+}
 function commandOBJ(data) {
     return JSON.stringify({
         'username': username,
@@ -134,7 +141,31 @@ function start() {
                 } else if (txt == '!ping') {
                     pingStart = parseDate(new Date());
                     connection.sendUTF(commandOBJ(txt.substr(1)));
+                } else if (txt == '!teszt5000') {
+                    var content = fs.readFileSync('./teszt5000.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
+                    connection.sendUTF(messagev2OBJ(content));
+                } else if (txt == '!teszt10k') {
+                    var content = fs.readFileSync('./teszt10k.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
+                    connection.sendUTF(messagev2OBJ(content));
+                } else if (txt == '!teszt100kv1') {
+                    var str = fs.readFileSync('./teszt100k.txt').toString();
+                    connection.sendUTF(messageOBJ(content));
+                } else if (txt == '!teszt100kv2') {
+                    var content = fs.readFileSync('./teszt100k.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
+                    connection.sendUTF(messagev2OBJ(content));
                 }
+            } else if (txt.startsWith('_')) {
+                var content = txt.substr(1).split(' ');
+                connection.sendUTF(messagev2OBJ(content));
             } else {
                 connection.sendUTF(messageOBJ(txt));
             }
@@ -168,8 +199,16 @@ function parseMessage(message) {
         } else {
             console.log(YRpref() + `${msg.username}: ${msg.content}`);
         }
+    } else if (msg.type == 'messagev2') {
+        process.stdout.write(YRpref() + `${msg.username}: `);
+        for (i in msg.content) {
+            process.stdout.write(msg.content[i] + ' ');
+        }
+        process.stdout.write('\n');
     } else if (msg.type == 'command') {
         parseCommand(msg);
+    } else if (msg.type == 'file') {
+        parseFile(msg);
     }
 }
 
@@ -180,4 +219,8 @@ function parseCommand(msg) {
             AIcl(`The ping is: ${(pingEnd - pingStart)} ms`);
         }
     }
+}
+
+function parseFile(msg) {
+
 }
