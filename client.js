@@ -153,6 +153,15 @@ function start() {
                         content[i] = content[i].trim();
                     }
                     connection.sendUTF(messagev2OBJ(content));
+                } else if (txt == '!teszt100kv1') {
+                    var str = fs.readFileSync('./teszt100k.txt').toString();
+                    connection.sendUTF(messageOBJ(content));
+                } else if (txt == '!teszt100kv2') {
+                    var content = fs.readFileSync('./teszt100k.txt').toString().split(' ');
+                    for (i in content) {
+                        content[i] = content[i].trim();
+                    }
+                    connection.sendUTF(messagev2OBJ(content));
                 }
             } else if (txt.startsWith('_')) {
                 var content = txt.substr(1).split(' ');
