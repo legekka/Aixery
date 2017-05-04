@@ -178,6 +178,12 @@ function parseMessage(message) {
         } else {
             console.log(YRpref() + `${msg.username}: ${msg.content}`);
         }
+    } else if (msg.type == 'messagev2') {
+        var str = '';
+        for (i in msg.content) {
+            str += msg.content[i];
+        }
+        console.log(YRpref() + `${msg.username}: ${str}`)
     } else if (msg.type == 'command') {
         parseCommand(msg);
     } else if (msg.type == 'file') {
