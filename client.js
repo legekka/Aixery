@@ -104,6 +104,13 @@ function messageOBJ(data) {
     });
 }
 
+function messagev2OBJ(data) {
+    return JSON.stringify({
+        'username': username,
+        'content': data,
+        'type': 'messagev2',
+    });
+}
 function commandOBJ(data) {
     return JSON.stringify({
         'username': username,
@@ -135,6 +142,9 @@ function start() {
                     pingStart = parseDate(new Date());
                     connection.sendUTF(commandOBJ(txt.substr(1)));
                 }
+            } else if (txt.startsWith('_')) {
+                var content = txt.substr(1).split(' ');
+                connection.sendUTF(messagev2OBJ(content));
             } else {
                 connection.sendUTF(messageOBJ(txt));
             }
@@ -168,8 +178,16 @@ function parseMessage(message) {
         } else {
             console.log(YRpref() + `${msg.username}: ${msg.content}`);
         }
+    } else if (msg.type == 'messagev2') {
+        var str = '';
+        for (i in msg.content) {
+            str += msg.content[i];
+        }
+        console.log(YRpref() + `${msg.username}: ${str}`)
     } else if (msg.type == 'command') {
         parseCommand(msg);
+    } else if (msg.type == 'file') {
+        parseFile(msg);
     }
 }
 
@@ -184,4 +202,8 @@ function parseCommand(msg) {
             }
         }
     }
+}
+
+function parseFile(msg) {
+
 }
