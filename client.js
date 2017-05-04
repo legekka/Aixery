@@ -181,7 +181,7 @@ function parseMessage(message) {
     } else if (msg.type == 'messagev2') {
         var str = '';
         for (i in msg.content) {
-            str += msg.content[i];
+            str += msg.content[i] + ' ';
         }
         console.log(YRpref() + `${msg.username}: ${str}`)
     } else if (msg.type == 'command') {
