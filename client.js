@@ -173,7 +173,7 @@ function start() {
 
         connection.on('message', function (message) {
             if (message.type === 'utf8') {
-                parseMessage(message);
+                parseMessage(message, connection);
                 //console.log(message.utf8Data);
             }
         });
@@ -191,7 +191,7 @@ function start() {
     client.connect(serverip, 'echo-protocol', JSON.stringify({ "username": username, "key": key }));
 }
 
-function parseMessage(message) {
+function parseMessage(message, connection) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
         if (msg.username == 'Yrexia') {
@@ -209,6 +209,15 @@ function parseMessage(message) {
         parseCommand(msg);
     } else if (msg.type == 'file') {
         parseFile(msg);
+    } else if (msg.type == 'convert') {
+        parseConvert(msg, connection);
+    }
+}
+
+function parseConvert(msg, connection) {
+    if (msg.username == 'Yrexia') {
+        YRcl('Convert requested: ', msg.url);
+        
     }
 }
 
