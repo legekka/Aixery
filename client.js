@@ -216,8 +216,14 @@ function parseMessage(message, connection) {
 
 function parseConvert(msg, connection) {
     if (msg.username == 'Yrexia') {
-        YRcl('Convert requested: ', msg.url);
-        
+        YRcl('Convert requested: ' + msg.url);
+        require('./module/convert.js').convert(msg.url, (url) => {
+            connection.sendUTF(JSON.stringify({
+                'username': username,
+                'type': 'convert',
+                'url': url
+            }))
+        });
     }
 }
 
