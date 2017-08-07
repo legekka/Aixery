@@ -3,7 +3,7 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 
 module.exports = {
-    upload: (path) => {
+    upload: (path, callback) => {
         if (fs.existsSync(path)) {
             var req = request("https://s-ul.eu/upload.php", {
                 method: "POST",
@@ -34,7 +34,7 @@ module.exports = {
                     var body = JSON.parse(body);
                     var link = body.protocol + body.domain + '/' + body.filename + body.extension;
                     console.log('URL: ' + link);
-                    return link;
+                    return callback(link);
                 }
             });
         } else {

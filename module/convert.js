@@ -9,7 +9,7 @@ var path1 = 'I:\\Munka\\Aixery\\waifu2xCache\\input\\';
 var path2 = 'I:\\Munka\\Aixery\\waifu2xCache\\output\\';
 
 module.exports = {
-    convert: (url) => {
+    convert: (url, callback) => {
         var ext = url.split('.')[url.split('.').length - 1];
         var name = md5(url);
         var fname = name + '.' + ext
@@ -24,7 +24,11 @@ module.exports = {
         if (!fs.existsSync(path2 + name + '.png')) {
             console.log('ajjaj.');
         }
-        var link = require('./upload.js').upload(path2 + name + '.png');
-        return link;
+        require('./upload.js').upload(path2 + name + '.png', (link) => {
+            fs.unlinkSync(path1 + fname);
+            fs.unlinkSync(path2 + name + '.png');
+            return callback(link);
+        });
+        
     }
 }

@@ -220,11 +220,13 @@ function parseMessage(message, connection) {
 function parseConvert(msg, connection) {
     if (msg.username == 'Yrexia') {
         YRcl('Convert requested: ' + msg.url);
-        require('./module/convert.js').convert(msg.url, (url) => {
+        require('./module/convert.js').convert(msg.url, (link) => {
             connection.sendUTF(JSON.stringify({
                 'username': username,
                 'type': 'convert',
-                'url': url
+                'url': link,
+                'channel_id': msg.channel_id,
+                'color': msg.color
             }))
         });
     }
