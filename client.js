@@ -227,7 +227,7 @@ function parseConvert(msg, connection) {
                 'url': link,
                 'channel_id': msg.channel_id,
                 'color': msg.color,
-                'original_url': msg.original_url
+                'original_url': msg.url
             }))
         });
     }
