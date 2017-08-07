@@ -162,6 +162,9 @@ function start() {
                         content[i] = content[i].trim();
                     }
                     connection.sendUTF(messagev2OBJ(content));
+                } else if (txt == '!exit' || txt == '!close' || txt == '!quit') {
+                    //AIcl('Closing connection...');
+                    connection.close();
                 }
             } else if (txt.startsWith('_')) {
                 var content = txt.substr(1).split(' ');
