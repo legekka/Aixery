@@ -20,7 +20,8 @@ var username;
 var key;
 
 //var serverip = 'ws://localhost:9669/';
-var serverip = 'ws://leibniz.cf:9669/';
+//var serverip = 'ws://leibniz.cf:9669/';
+var serverip = 'ws://legekka.hopto.org';
 
 function initialize() {
     if (!fs.existsSync('./clientinfo.txt')) {
@@ -162,6 +163,9 @@ function start() {
                         content[i] = content[i].trim();
                     }
                     connection.sendUTF(messagev2OBJ(content));
+                } else if (txt == '!exit' || txt == '!close' || txt == '!quit') {
+                    //AIcl('Closing connection...');
+                    connection.close();
                 }
             } else if (txt.startsWith('_')) {
                 var content = txt.substr(1).split(' ');
