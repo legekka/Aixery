@@ -21,7 +21,7 @@ var key;
 
 //var serverip = 'ws://localhost:9669/';
 //var serverip = 'ws://leibniz.cf:9669/';
-var serverip = 'ws://legekka.hopto.org';
+var serverip = 'ws://legekka.hopto.org:9669/';
 
 function initialize() {
     if (!fs.existsSync('./clientinfo.txt')) {
