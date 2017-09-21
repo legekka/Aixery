@@ -8,8 +8,6 @@ var client = new WebSocketClient();
 var serverip = 'ws://boltzmann.cf:9669/';
 var pingStart;
 
-
-
 require('./module/initialize.js')((response) => {
     var connected = false;
     var autoconnect = setInterval(() => {
@@ -62,7 +60,7 @@ require('./module/initialize.js')((response) => {
     client.connect(serverip, 'echo-protocol', JSON.stringify({ "username": response.username, "key": response.key }));
 })
 
-function parseMessage(message) {
+function parseMessage(message, connection) {
     var msg = JSON.parse(message.utf8Data.toString().trim());
     if (msg.type == 'message') {
         if (msg.username == 'Yrexia') {
@@ -80,6 +78,24 @@ function parseMessage(message) {
         parseCommand(msg);
     } else if (msg.type == 'file') {
         parseFile(msg);
+    } else if (msg.type == 'convert') {
+        parseConvert(msg, connection);
+    }
+}
+
+function parseConvert(msg, connection) {
+    if (msg.username == 'Yrexia') {
+        YRcl('Convert requested: ' + msg.url);
+        require('./module/convert.js').convert(msg.url, (link) => {
+            connection.sendUTF(JSON.stringify({
+                'username': username,
+                'type': 'convert',
+                'url': link,
+                'channel_id': msg.channel_id,
+                'color': msg.color,
+                'original_url': msg.url
+            }))
+        });
     }
 }
 
