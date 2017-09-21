@@ -88,10 +88,6 @@ function parseCommand(msg) {
         if (msg.command == 'pingEnd') {
             var pingEnd = parseDate(new Date());
             AIcl(`The ping is: ${(pingEnd - pingStart)} ms`);
-        } else if (msg.command == 'location') {
-            if (username == 'HoloPadQHD') {
-                reqreload('./termux.js').location();
-            }
         }
     }
 }
