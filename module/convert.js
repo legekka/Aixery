@@ -3,10 +3,11 @@ var exec = require('child_process').execSync;
 var md5 = require('md5');
 
 var waifu2xcaffe = 'waifu2xcaffe.bat';
-var curl = 'L:\\Programs\\curl\\curl.exe';
+var curl = 'D:\\Külső könyvtárak\\curl.exe';
 
-var path1 = 'I:\\Munka\\Aixery\\waifu2xCache\\input\\';
-var path2 = 'I:\\Munka\\Aixery\\waifu2xCache\\output\\';
+var path1 = 'D:\\CudaPower\\waifu2xCache\\input\\';
+var path2 = 'D:\\waifucloud\\images\\waifu2x\\';
+var url = 'http://boltzmann.cf:7007/images/waifu2x/';
 
 module.exports = {
     convert: (url, callback) => {
@@ -17,18 +18,11 @@ module.exports = {
         if (!fs.existsSync(path1 + fname)) {
             throw err; // curl image download failed
         }
-        //multi(UpRGB)(noise_scale)(Level3)(x4.000000)
-        //.\waifu2x-caffe.exe -i "I:\Munka\Aixery\waifu2xCache\input\26226b4f76d6c3706bf63406cd7e691e.png" -o "I:\Munka\Aixery\waifu2xCache\output\" -m noise_scale -s 4 -n 3
-
         exec(waifu2xcaffe + ' "' + path1 + fname + '" "' + path2 + name + '.png"');
         if (!fs.existsSync(path2 + name + '.png')) {
             console.log('ajjaj.');
         }
-        require('./upload.js').upload(path2 + name + '.png', (link) => {
-            fs.unlinkSync(path1 + fname);
-            fs.unlinkSync(path2 + name + '.png');
-            return callback(link);
-        });
-        
+        fs.unlinkSync(path1 + fname);
+        return callback(url + name + '.png');
     }
 }
