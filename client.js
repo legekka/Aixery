@@ -5,10 +5,12 @@ var WebSocketClient = require('websocket').client;
 var reqreload = require('./module/reqreload.js');
 var client = new WebSocketClient();
 
+var username;
 var serverip = 'ws://boltzmann.cf:9669/';
 var pingStart;
 
 require('./module/initialize.js')((response) => {
+    username = response.username;
     var connected = false;
     var autoconnect = setInterval(() => {
         if (!connected) {
@@ -46,7 +48,7 @@ require('./module/initialize.js')((response) => {
         });
         connection.on('message', function (message) {
             if (message.type === 'utf8') {
-                parseMessage(message);
+                parseMessage(message, connection);
             }
         });
         connection.on('error', function (error) {
@@ -78,24 +80,6 @@ function parseMessage(message, connection) {
         parseCommand(msg);
     } else if (msg.type == 'file') {
         parseFile(msg);
-    } else if (msg.type == 'convert') {
-        parseConvert(msg, connection);
-    }
-}
-
-function parseConvert(msg, connection) {
-    if (msg.username == 'Yrexia') {
-        YRcl('Convert requested: ' + msg.url);
-        require('./module/convert.js').convert(msg.url, (link) => {
-            connection.sendUTF(JSON.stringify({
-                'username': username,
-                'type': 'convert',
-                'url': link,
-                'channel_id': msg.channel_id,
-                'color': msg.color,
-                'original_url': msg.url
-            }))
-        });
     }
 }
 
